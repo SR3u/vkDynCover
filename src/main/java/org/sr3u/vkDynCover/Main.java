@@ -26,7 +26,7 @@ public class Main {
         }
 
         if (configuration.getGroups().isEmpty()) {
-            System.out.println("Failed to get token, please check token.txt\n" + CONFIGURATION_TXT);
+            System.out.println("Failed to get configuration, please check configuration.txt\n" + CONFIGURATION_TXT);
             System.exit(-1);
         }
 
@@ -54,7 +54,7 @@ public class Main {
 
     private static void sendRandomPhoto(Configuration.Group group) throws IOException {
         boolean sent = false;
-        for (int i = 0; (i< 100) && (!sent); i++) {
+        for (int i = 0; (i < 100) && (!sent); i++) {
             File file = randomFileIn(group.getImagesDirectory());
             if (file == null) {
                 System.out.println("Failed to get random file in " + group.getImagesDirectory());
