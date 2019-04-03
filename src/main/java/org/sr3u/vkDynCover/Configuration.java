@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,8 @@ public class Configuration {
             "# Then add desired covers in images/<groupId> folder, and enjoy.\n" +
             "# Empty lines are ignored\n" +
             "##################################################################################################################\n" +
-            "# Start by adding your groups here.\n\n";
+            "# Start by adding your groups here.\n" +
+            "# GROUP_ID TOKEN                                                                                 REFRESH_DELAY_SEC\n";
     private Collection<Group> groups = new ArrayList<>();
 
     public Configuration(String path) throws IOException {
@@ -60,22 +63,22 @@ public class Configuration {
         }
 
         public Group(String line, int lineNumber) {
-            String[] split = line.split("\\W+");
-            if (split.length < 2) {
+            List<String> split = Arrays.stream(line.split("\\W+")).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+            if (split.size() < 2) {
                 System.out.println("Invalid line " + lineNumber + ": " + line);
                 System.out.println("Check configuration.txt file");
                 System.exit(-2);
             }
-            if (split.length >= 3) {
+            if (split.size() >= 3) {
                 try {
-                    this.refreshInterval = Integer.parseInt(split[2]);
+                    this.refreshInterval = Integer.parseInt(split.get(2));
                 } catch (Throwable t) {
                     System.out.println("Invalid line " + lineNumber + ": " + line);
                     System.out.println("Check configuration.txt file");
                 }
             }
-            id = split[0];
-            token = split[1];
+            id = split.get(0);
+            token = split.get(1);
         }
 
         public String getImagesDirectory() {
