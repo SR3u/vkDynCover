@@ -39,9 +39,7 @@ public class Configuration {
     private void parse(String path) throws IOException {
         AtomicInteger index = new AtomicInteger();
         groups = Files.lines(Paths.get(path))
-                .map(line -> {
-                    return Pair.of(index.incrementAndGet(), line);
-                })
+                .map(line -> Pair.of(index.incrementAndGet(), line))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .filter(pair -> !pair.getSecond().startsWith("#"))
                 .map(Group::new)
